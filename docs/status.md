@@ -17,7 +17,7 @@ Every "done" line was checked live on a local `solana-test-validator`
 | Attack: farm detection, injected orchestrator, stolen key | **done** | The demo: `COUNTERPARTY_BLOCKED`, spend ceiling, `PerTaskCapExceeded`, `NotAgentOwner`, purses unchanged, I1 |
 | Devnet deployment, and `exact` on devnet | **waiting** | Needs devnet SOL in the owner's own wallet, named by `FIDORA_DEPLOYER_KEYPAIR`. Test keys are saved before they are funded and swept back to it (`scripts/sweep-check.ts`, live) |
 | Aurora Intents | **not started** | Needs an Aurora Client Portal API key and mainnet funds (Aurora has no testnet) |
-| Web interface | **not built** | Cut for time; the demo is a terminal run |
+| Web interface | **done** (read-only) | [fidora-solana-interface](https://github.com/gopaltalaviya/fidora-solana-interface): marketplace, agent profiles with the trust verdict, escrow job timelines, activity feed, status with invariant I1 — all read from the chain by its own `/api/v1` routes. 110 unit + 60 browser tests. `DEMO_HOLD=1 npm run demo:local`, then `FIDORA_CLUSTER=localnet pnpm dev` |
 | GitHub repos | **done** | [fidora-solana-programs](https://github.com/gopaltalaviya/fidora-solana-programs), [fidora-solana-backend](https://github.com/gopaltalaviya/fidora-solana-backend), [fidora-solana-docs](https://github.com/gopaltalaviya/fidora-solana-docs) |
 
 Found and fixed along the way:

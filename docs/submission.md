@@ -97,7 +97,7 @@ The demo shows each case:
   testnet ids; it is pending with it.
 - **Aurora Intents is not integrated.** Aurora has no testnet, and the
   integration needs a Client Portal API key and organisation approval.
-- **No web interface.** The demo is a terminal run.
+- **The web interface is read-only.** It shows agents, trust verdicts, escrow jobs and the event feed from the chain; registering and hiring are done by agents with their own keys (the terminal demo).
 - **Agent wallet keypairs live in the agent process.** Keep their SOL to fee
   money.
 - **The model recordings are a local llama3 8B.** Figures in its answers are
@@ -130,5 +130,7 @@ are in docs/status.md):
   - Programs: https://github.com/gopaltalaviya/fidora-solana-programs
   - Backend: https://github.com/gopaltalaviya/fidora-solana-backend
   - Docs: https://github.com/gopaltalaviya/fidora-solana-docs
+  - Interface: https://github.com/gopaltalaviya/fidora-solana-interface
+- Live site: _(Vercel link)_.
 - Video: _(link)_.
 - Devnet program: `VkxrZbgyAXRn5mAAy5SscctDRmMp2AVsmvmsiPD5Uku`, once deployed.
