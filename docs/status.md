@@ -15,9 +15,9 @@ Every "done" line was checked live on a local `solana-test-validator`
 | Agents: plan, discover on chain, trust gate, select, x402 pay, judge, approve or dispute | **done** | `npm run demo:local`: `Demo passed.` from a fresh chain with cached models |
 | Failed-payment handling | **done** | The demo: worker model down → `decline_job` → purse restored |
 | Attack: farm detection, injected orchestrator, stolen key | **done** | The demo: `COUNTERPARTY_BLOCKED`, spend ceiling, `PerTaskCapExceeded`, `NotAgentOwner`, purses unchanged, I1 |
-| Devnet deployment, and `exact` on devnet | **waiting** | Needs devnet SOL in the owner's own wallet, named by `FIDORA_DEPLOYER_KEYPAIR`. Test keys are saved before they are funded and swept back to it (`scripts/sweep-check.ts`, live) |
+| Devnet deployment, and `exact` on devnet | **waiting on the owner** | Needs (1) the owner's own wallet, named by `FIDORA_DEPLOYER_KEYPAIR` in `fidora-solana-programs/.env` (an empty `.env` is in place, gitignored), and (2) the program keypair whose public key is `VkxrZbgyAXRn5mAAy5SscctDRmMp2AVsmvmsiPD5Uku` — it is not in the repo by design (`*-keypair.json` is gitignored). If it is lost, the owner makes a new one and the program id, `fidora.so` and the IDL are rebuilt. 2026-11-07: that address holds no account on devnet. Test keys are saved before they are funded and swept back to the deployer (`scripts/sweep-check.ts`, live) |
 | Aurora Intents | **not started** | Needs an Aurora Client Portal API key and mainnet funds (Aurora has no testnet) |
-| Web interface | **done** (read-only) | [fidora-solana-interface](https://github.com/gopaltalaviya/fidora-solana-interface): marketplace, agent profiles with the trust verdict, escrow job timelines, activity feed, status with invariant I1 — all read from the chain by its own `/api/v1` routes. 110 unit + 60 browser tests. `DEMO_HOLD=1 npm run demo:local`, then `FIDORA_CLUSTER=localnet pnpm dev` |
+| Web interface | **done** (read-only) | [fidora-solana-interface](https://github.com/gopaltalaviya/fidora-solana-interface): marketplace, agent profiles with the trust verdict, escrow job timelines, activity feed, status with invariant I1 — all read from the chain by its own `/api/v1` routes. 110 unit + 61 browser tests (×5 browsers with `E2E_ALL_BROWSERS=1`). `DEMO_HOLD=1 npm run demo:local`, then `FIDORA_CLUSTER=localnet pnpm dev` |
 | GitHub repos | **done** | [fidora-solana-programs](https://github.com/gopaltalaviya/fidora-solana-programs), [fidora-solana-backend](https://github.com/gopaltalaviya/fidora-solana-backend), [fidora-solana-docs](https://github.com/gopaltalaviya/fidora-solana-docs) |
 
 Found and fixed along the way:
@@ -29,3 +29,24 @@ Found and fixed along the way:
   additive, so each phase has its own payload key.
 - **Platform tools.** The ones bundled with Agave 3.0 cannot build current
   crates; `--tools-version v1.58` is used.
+- **`/jobs` was a dead link** (2026-11-07). Quickstart, Guides and Build an
+  agent linked to `/jobs`; only `/jobs/<id>` exists. `/jobs` now redirects to
+  the activity feed, which lists the jobs (`next.config.mjs`); a browser test
+  covers it, red before the fix.
+
+## Re-verified 2026-11-07 on a fresh checkout (Windows 11 + WSL Ubuntu, Agave 4.0.0)
+
+| Check | Result |
+|---|---|
+| Program rebuilt from `git archive HEAD` (`cargo build-sbf --tools-version v1.58`) | sha256 `d86e727b…` = `artifacts/SHA256SUMS`: the committed `fidora.so` is this source |
+| Program unit tests | 7/7 |
+| Backend `npm run check` | typecheck clean, 46/46 |
+| Backend `npm run test:live` | `All live checks passed.` (verify-solana 23, x402 smoke, attacks 6/6, sweep check) |
+| Backend `npm run demo:local` | `Demo passed.` |
+| Interface `pnpm check` | typecheck, lint, format clean; 110/110 |
+| Interface browser tests, all 5 browsers (`E2E_ALL_BROWSERS=1 pnpm test:e2e`) | 303 passed, 2 skipped |
+| Interface production build on the live local chain | every page 200, every `/api/v1` route returns chain data, I1 holds (vault = owed), no broken internal link |
+
+On Windows: `npm ci` refuses the backend's lockfile under npm 10 (written by
+npm 11). `npm install` works; it rewrites the lockfile (drops npm 11's
+`libc` fields), so `git checkout -- package-lock.json` afterwards.
