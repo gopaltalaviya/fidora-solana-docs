@@ -126,6 +126,9 @@ are in docs/status.md):
 
 ## 6. Links (fill in at submission)
 
-- Repos: the three above.
+- Repos (clone side by side):
+  - Programs: https://github.com/gopaltalaviya/fidora-solana-programs
+  - Backend: https://github.com/gopaltalaviya/fidora-solana-backend
+  - Docs: https://github.com/gopaltalaviya/fidora-solana-docs
 - Video: _(link)_.
 - Devnet program: `VkxrZbgyAXRn5mAAy5SscctDRmMp2AVsmvmsiPD5Uku`, once deployed.

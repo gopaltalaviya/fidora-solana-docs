@@ -18,7 +18,7 @@ Every "done" line was checked live on a local `solana-test-validator`
 | Devnet deployment, and `exact` on devnet | **waiting** | Needs devnet SOL in the owner's own wallet, named by `FIDORA_DEPLOYER_KEYPAIR`. Test keys are saved before they are funded and swept back to it (`scripts/sweep-check.ts`, live) |
 | Aurora Intents | **not started** | Needs an Aurora Client Portal API key and mainnet funds (Aurora has no testnet) |
 | Web interface | **not built** | Cut for time; the demo is a terminal run |
-| GitHub repos | **waiting** | `git ls-remote` for `gopaltalaviya/fidora-solana-{programs,backend,interface,docs}` answers "Repository not found" |
+| GitHub repos | **done** | [fidora-solana-programs](https://github.com/gopaltalaviya/fidora-solana-programs), [fidora-solana-backend](https://github.com/gopaltalaviya/fidora-solana-backend), [fidora-solana-docs](https://github.com/gopaltalaviya/fidora-solana-docs) |
 
 Found and fixed along the way:
 - **Confirming a decoded transaction.** A transaction decoded from base64
