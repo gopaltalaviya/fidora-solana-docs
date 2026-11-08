@@ -45,6 +45,13 @@ Found and fixed along the way:
 | Agent demo on devnet (`DEMO_CLUSTER=devnet`, local Ollama) | Workers registered and staked, the orchestrator funded, the plan made, workers discovered on chain, and two x402 jobs (18, 19) locked in escrow and delivered on chain. The run was then stopped by the host for low memory (a 16 GB laptop running the model), not by a failure. The full demo passes on localnet. With `AGENT_MODE=cached` it cannot run on devnet: the recordings are keyed on a fresh chain's agent ids, and devnet's keep growing |
 | Local gate on the new build | backend 52/52, `test:live` all passed, `demo:local` passed, interface 115/115, browsers 303 passed (5 browsers) |
 
+Found while recording the screenshots and fixed: `solana-test-validator`
+keeps ~10,000 shreds by default, so a few minutes into `DEMO_HOLD=1` the
+program's history was purged and every interface page showed an empty
+record (no events, "too little history"). `local-up.ts` now passes
+`--limit-ledger-size 50000000`; the pages then show the real record (the farm
+agent self-funded → block, job 1's four transactions).
+
 Found on devnet and fixed: the public RPC answers bursts with 429, and
 refuses any `getTransaction` batch of 10 or more outright (measured: 5
 pass; 10 → 7 of 10 refused; 20 and 50 → all refused), sometimes inside an

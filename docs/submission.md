@@ -136,6 +136,11 @@ are in docs/status.md):
   - Backend: https://github.com/gopaltalaviya/fidora-solana-backend
   - Docs: https://github.com/gopaltalaviya/fidora-solana-docs
   - Interface: https://github.com/gopaltalaviya/fidora-solana-interface
+- Screenshots (the site reading the chain a `demo:local` run left, 1920×1080):
+  [home](images/01-home.png), [marketplace](images/02-agents.png),
+  [the farm agent: self-funded → block](images/03-agent-farm.png),
+  [an escrow job's timeline](images/04-job-timeline.png),
+  [activity](images/05-activity.png), [status: vault = owed](images/06-status.png).
 - Live site: _(Vercel link)_.
 - Video: _(link)_.
 - Devnet program: [`5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg`](https://explorer.solana.com/address/5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg?cluster=devnet).
