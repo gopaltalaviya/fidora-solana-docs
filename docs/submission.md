@@ -67,7 +67,7 @@ The demo runs end to end on a local validator with one command.
 - The x402 worker and orchestrator.
 - The on-chain trust read.
 - The demo and the one-command local run.
-- The unit tests (46 backend, 7 program), mutation-checked, and a live
+- The unit tests (52 backend, 7 program), mutation-checked, and a live
   suite of hostile workers (`scripts/x402-attacks.ts`).
 
 Checkpoints 1 and 2 were missed: this is a late entry.
@@ -144,4 +144,6 @@ are in docs/status.md):
 - Live site, reading devnet: https://fidora-solana-interface.vercel.app/
   (status shows the vault = what the program owes, live).
 - Video (3:46, captioned): https://www.youtube.com/watch?v=yfxOOvaoiOo
+- Presentation deck (9 slides): [docs/Fidora-pitch.pdf](Fidora-pitch.pdf)
+  (source `docs/pitch/pitch.html`; https://github.com/gopaltalaviya/fidora-solana-docs/blob/master/docs/Fidora-pitch.pdf)
 - Devnet program: [`5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg`](https://explorer.solana.com/address/5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg?cluster=devnet).

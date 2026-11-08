@@ -1,4 +1,4 @@
-# Fidora: status, 2026-11-08
+# Fidora: status, 2026-11-08 (final check 23:20 UTC)
 
 Every "done" line was checked live on a local `solana-test-validator`
 (Agave 3.0.10), not against a mock.
@@ -17,7 +17,7 @@ Every "done" line was checked live on a local `solana-test-validator`
 | Attack: farm detection, injected orchestrator, stolen key | **done** | The demo: `COUNTERPARTY_BLOCKED`, spend ceiling, `PerTaskCapExceeded`, `NotAgentOwner`, purses unchanged, I1 |
 | Devnet deployment | **done** (2026-11-08) | Program `5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg` (a new program keypair: the one for the old id `VkxrZbg…` was not found, so `declare_id!`, `fidora.so` and the IDL were rebuilt for the new id), deployed and initialized by the owner's wallet `2m9UHYVSk6V7ErSycjhQdev2RqjGymYsgx2aozhC19eG` (upgrade authority, owner and arbiter). `verify-solana --cluster devnet`: 21 checks passed on devnet; see below |
 | Aurora Intents | **not started** | Needs an Aurora Client Portal API key and mainnet funds (Aurora has no testnet) |
-| Web interface | **done** (read-only) | [fidora-solana-interface](https://github.com/gopaltalaviya/fidora-solana-interface): marketplace, agent profiles with the trust verdict, escrow job timelines, activity feed, status with invariant I1 — all read from the chain by its own `/api/v1` routes. 110 unit + 61 browser tests (×5 browsers with `E2E_ALL_BROWSERS=1`). `DEMO_HOLD=1 npm run demo:local`, then `FIDORA_CLUSTER=localnet pnpm dev` |
+| Web interface | **done** (read-only) | [fidora-solana-interface](https://github.com/gopaltalaviya/fidora-solana-interface): marketplace, agent profiles with the trust verdict, escrow job timelines, activity feed, status with invariant I1 — all read from the chain by its own `/api/v1` routes. 116 unit + 61 browser tests (×5 browsers with `E2E_ALL_BROWSERS=1`). `DEMO_HOLD=1 npm run demo:local`, then `FIDORA_CLUSTER=localnet pnpm dev` |
 | GitHub repos | **done** | [fidora-solana-programs](https://github.com/gopaltalaviya/fidora-solana-programs), [fidora-solana-backend](https://github.com/gopaltalaviya/fidora-solana-backend), [fidora-solana-docs](https://github.com/gopaltalaviya/fidora-solana-docs) |
 
 Found and fixed along the way:
@@ -41,7 +41,7 @@ source, sha256 `62ade182…`), the live site
 https://fidora-solana-interface.vercel.app/ (21/21 pages in a browser, on
 devnet), the four repos pushed and passing from fresh clones, the
 screenshots, and the video (`fidora-demo.webm`, 3:46, kept outside git; https://www.youtube.com/watch?v=yfxOOvaoiOo).
-Nothing is uncommitted.
+Nothing is uncommitted. Git state and gates for the interface are in the final check below.
 
 Waits on the owner, before the deadline (Mon 9 Nov 2026, 11:59 UTC):
 1. Make the four repos public (they answer 404 until then).
@@ -49,6 +49,28 @@ Waits on the owner, before the deadline (Mon 9 Nov 2026, 11:59 UTC):
 3. Submit on Encode from `submission.md`.
 4. Optional: a private devnet RPC key on Vercel (`FIDORA_RPC_URL`), so the
    activity and trust pages are complete on the first load.
+
+### Final check, 2026-11-08 22:30–23:20 UTC (live URL and localhost)
+
+| Check | Result |
+|---|---|
+| Live site, 24 pages (19 sitemap + agent and job pages) in headless Chromium | 24/24: 200, no console error, no failed request, no loading placeholder left; 86/86 internal links answer |
+| Live `/api/v1/*` | status operational on devnet, I1 holds (329.28 = 329.28 USDC), 42 agents, 20 jobs; an independent read of the devnet RPC gives the same vault balance and account counts |
+| Program on devnet | executable, upgrade authority the owner's wallet, `solana program dump` sha256 `62ade182…` = `artifacts/fidora.so`; `verify-solana --cluster devnet` 21/21 again |
+| Backend | `check` 52/52, `test:live` all passed, `demo:local` `Demo passed.` |
+| Site on the held local chain, production build | 23/23 pages, 50 events complete, farm agent self-funded → block, I1 holds |
+| Interface from a fresh clone | typecheck, lint, format clean; e2e 303 passed in 5 browsers; unit 116/116 after the fix below |
+| Program unit tests | 7/7 |
+| Repos, full history | no keys, no personal data, no local paths; only `.env.example` with empty values |
+
+Found and fixed:
+- `NEXT_PUBLIC_SITE_URL` was not set on Vercel, so the live sitemap, robots
+  and `og:image` pointed at `localhost:3000`. Set by the owner and redeployed;
+  all 19 sitemap URLs are now on the real domain.
+- One flaky unit test (`patient-fetch.test.ts`, failed ~1 run in 6): it
+  ignored the retry's random jitter. The test now pins `Math.random`
+  (interface e0334ee); 12/12 runs green.
+- Cosmetic, left as is: the footer says "Solana devnet" on a localnet run too.
 
 To resume: `npm run test:live` and `npm run demo:local` in
 fidora-solana-backend; `corepack pnpm check` and `pnpm test:e2e` in

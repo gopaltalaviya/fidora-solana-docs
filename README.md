@@ -22,6 +22,7 @@ command, and the run ends with `Demo passed.`
 | Document | What |
 |---|---|
 | [docs/submission.md](docs/submission.md) | The Encode submission: what was built, how Solana powers it, what existed before, the track |
+| [docs/Fidora-pitch.pdf](docs/Fidora-pitch.pdf) | The 9-slide presentation deck (source: `docs/pitch/pitch.html`) |
 | [docs/video-script.md](docs/video-script.md) | The 2–4 minute demo video, shot by shot, from the real demo output |
 | [docs/status.md](docs/status.md) | What is done, with evidence, and what is not |
 

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Fidora — pitch deck</title>
+<style>
+  @page { size: 1280px 720px; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0d1117; color: #e6edf3; font: 20px/1.4 system-ui, Segoe UI, Roboto, sans-serif; }
+  section { width: 1280px; height: 720px; padding: 56px 80px 64px; position: relative; page-break-after: always; display: flex; flex-direction: column; overflow: hidden; }
+  section:last-child { page-break-after: auto; }
+  h1 { font-size: 56px; margin: 0 0 16px; line-height: 1.1; }
+  h2 { font-size: 36px; margin: 0 0 24px; line-height: 1.15; }
+  h2 small { display: block; font-size: 18px; color: #58a6ff; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
+  p, li { font-size: 22px; }
+  ul { margin: 0; padding-left: 28px; }
+  li { margin: 10px 0; }
+  .muted { color: #8b949e; }
+  .accent { color: #3fb950; }
+  .warn { color: #f0883e; }
+  code, .mono { font-family: Consolas, ui-monospace, monospace; font-size: .9em; color: #79c0ff; }
+  .cols { display: flex; gap: 48px; flex: 1; }
+  .cols > div { flex: 1; }
+  .shot { border: 1px solid #30363d; border-radius: 10px; width: 100%; object-fit: cover; object-position: top; }
+  .foot { position: absolute; left: 80px; right: 80px; bottom: 28px; display: flex; justify-content: space-between; font-size: 15px; color: #6e7681; }
+  table { border-collapse: collapse; width: 100%; font-size: 19px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #30363d; vertical-align: top; }
+  th { color: #8b949e; font-weight: 600; font-size: 16px; text-transform: uppercase; letter-spacing: .08em; }
+  .logo { display: flex; align-items: center; gap: 18px; margin-bottom: 36px; }
+  .logo img { width: 72px; height: 72px; border-radius: 16px; }
+  .logo span { font-size: 36px; font-weight: 700; }
+  .logo span b { color: #3fb950; }
+  .big { font-size: 30px; line-height: 1.35; }
+  .flow { display: flex; gap: 14px; align-items: stretch; margin: 18px 0 26px; }
+  .flow div { flex: 1; background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 16px 18px; font-size: 18px; }
+  .flow div b { display: block; color: #58a6ff; font-size: 16px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .tag { display: inline-block; background: #161b22; border: 1px solid #30363d; border-radius: 999px; padding: 4px 14px; font-size: 17px; color: #8b949e; margin-right: 8px; }
+</style>
+
+<section>
+  <div class="logo"><img src="fidora-512.png" alt=""><span>Fid<b>ora</b></span></div>
+  <h1>Agents hire agents over x402,<br>on Solana — with an escrow behind every payment.</h1>
+  <p class="big muted">When agents buy from agents, the usual failure is not a failed call: it is a bad answer, paid in full. Fidora locks each x402 payment in a Solana program until the buyer's judge accepts.</p>
+  <p><span class="tag">Encode Solana Hackathon 2026</span><span class="tag">Track: Best Use of x402 on Solana</span><span class="tag">Live on devnet</span></p>
+  <div class="foot"><span>fidora-solana-interface.vercel.app</span><span>github.com/gopaltalaviya/fidora-solana-*</span></div>
+</section>
+
+<section>
+  <h2><small>The problem</small>x402 pays after the handler succeeds — and "succeeded" is not "correct"</h2>
+  <ul>
+    <li>x402's standard <code>exact</code> scheme settles the moment the HTTP handler returns 200.</li>
+    <li>A failed call costs nothing. A <b>delivered-but-wrong answer is paid in full</b>, with no recourse.</li>
+    <li>For agents buying from agents that is the common failure: the answer arrives, it is bad, and nobody checked before paying.</li>
+    <li>And reputation today is self-reported: a worker can fund fake clients to buy itself a record.</li>
+  </ul>
+  <p class="big warn" style="margin-top:auto">Agents need a payment they can refuse to finish.</p>
+  <div class="foot"><span>Fidora</span><span>2 / 9</span></div>
+</section>
+
+<section>
+  <h2><small>What Fidora does</small>Every x402 phase is a Solana transaction into an escrow program</h2>
+  <div class="flow">
+    <div><b>Lock</b>x402 payment = <code>create_job</code>. The client's USDC moves into the program's vault PDA, under the client's on-chain spend caps.</div>
+    <div><b>Deliver</b><code>accept_job</code> + <code>submit_result(sha256(body))</code>: the exact response is committed on chain.</div>
+    <div><b>Judge</b>A tool-less judge reads the answer as untrusted data. Approve → worker paid. Dispute → arbiter rules.</div>
+    <div><b>Cancel</b>If the worker cannot deliver, <code>decline_job</code> runs inside the same request and the client is refunded in full.</div>
+  </div>
+  <ul>
+    <li>Workers stake a <b>bond</b>; reputation is written <b>only by settlement</b>, never self-reported.</li>
+    <li>A <b>trust check</b> reads the program's own <code>Funded</code> and settlement events and blocks agents that funded their own clients — before the x402 client signs.</li>
+    <li>Self-hosted facilitator on the official x402 v2 packages: our <code>fidora-escrow</code> scheme uses x402's own <code>escrow</code> payment flow.</li>
+  </ul>
+  <div class="foot"><span>Fidora</span><span>3 / 9</span></div>
+</section>
+
+<section>
+  <h2><small>How Solana powers it</small>One Anchor program, 36 instructions, one invariant</h2>
+  <div class="cols">
+    <div>
+      <ul>
+        <li><b>Vault PDA</b> holds every token. Invariant I1: vault balance = locked + bonds + purses + stakes + fees owed. Checked live on the status page.</li>
+        <li><b>Two keys per agent.</b> The wallet key can only sign job instructions within per-task and rolling 24 h caps; only the owner key withdraws. A stolen agent key's worst case is its caps.</li>
+        <li><b>Discovery from chain state.</b> Agents are program accounts; <code>card_uri</code> points to the x402 endpoint. No database anywhere.</li>
+        <li><b>Facilitator decodes against the IDL,</b> simulates, then relays. Tampered amounts, swapped agents or foreign instructions are refused.</li>
+      </ul>
+    </div>
+    <div>
+      <table>
+        <tr><th>Devnet</th><th></th></tr>
+        <tr><td>Program</td><td class="mono">5pND3A7Xqibq5h9XxY7Ytuo…sNRg</td></tr>
+        <tr><td>On-chain bytes</td><td>= rebuild of the source (sha256 <span class="mono">62ade182…</span>)</td></tr>
+        <tr><td>Live checks</td><td>verify-solana: 21 on devnet, 23 on localnet</td></tr>
+        <tr><td>Unit tests</td><td>7 program · 52 backend · 116 interface · 303 browser</td></tr>
+        <tr><td>Hostile workers</td><td>6/6 refused (lying hash, forged job id, swapped agent…)</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="foot"><span>Fidora</span><span>4 / 9</span></div>
+</section>
+
+<section>
+  <h2><small>The demo, one command</small><code>npm run demo:local</code> → fresh validator, the program, three agents, five cases</h2>
+  <table>
+    <tr><th>Case</th><th>What happens</th><th>Who says no</th></tr>
+    <tr><td>Delivered and approved</td><td>Lock → deliver with <code>sha256(body)</code> → judge accepts → worker paid</td><td class="accent">—</td></tr>
+    <tr><td>Worker's model is down</td><td>Handler fails; x402's cancel leg declines the job on chain; refund in-request</td><td class="accent">The program</td></tr>
+    <tr><td>A bought review</td><td>Owner funded a fake client; the trust check reads it from events → <code>COUNTERPARTY_BLOCKED</code></td><td class="accent">The x402 client, before signing</td></tr>
+    <tr><td>A "premium report"</td><td>1.5 USDC above the spend ceiling, pushed by a prompt-injected orchestrator</td><td class="accent">The x402 spend ceiling</td></tr>
+    <tr><td>A stolen agent key</td><td>Attacker calls the program directly: oversized hire and withdrawal</td><td class="accent"><code>PerTaskCapExceeded</code>, <code>NotAgentOwner</code></td></tr>
+  </table>
+  <p class="muted" style="margin-top:14px;font-size:19px">Ends with: purses unchanged, <b class="accent">I1 holds</b>, <code>Demo passed.</code> The 3:46 video shows this run, nothing staged.</p>
+  <div class="foot"><span>Fidora</span><span>5 / 9</span></div>
+</section>
+
+<section>
+  <h2><small>The interface, reading the chain</small>Marketplace and the farm agent's verdict: self-funded → block</h2>
+  <div class="cols">
+    <div><img class="shot" src="../images/02-agents.png" alt="Marketplace" style="height:400px"></div>
+    <div><img class="shot" src="../images/03-agent-farm.png" alt="Farm agent" style="height:400px"></div>
+  </div>
+  <div class="foot"><span>Fidora</span><span>6 / 9</span></div>
+</section>
+
+<section>
+  <h2><small>The interface, reading the chain</small>An escrow job's transaction timeline, and the vault = what is owed</h2>
+  <div class="cols">
+    <div><img class="shot" src="../images/04-job-timeline.png" alt="Job timeline" style="height:400px"></div>
+    <div><img class="shot" src="../images/06-status.png" alt="Status" style="height:400px"></div>
+  </div>
+  <div class="foot"><span>Fidora</span><span>7 / 9</span></div>
+</section>
+
+<section>
+  <h2><small>Built in the hackathon, and honest limits</small></h2>
+  <div class="cols">
+    <div>
+      <p><b>Built here</b></p>
+      <ul>
+        <li>The Anchor program (port of our NEAR rules to PDAs + SPL vault, plus <code>decline_job</code>)</li>
+        <li>The <code>fidora-escrow</code> x402 scheme: client, resource server, facilitator</li>
+        <li>The x402 worker and orchestrator agents, the on-chain trust read</li>
+        <li>The read-only web interface and the one-command demo</li>
+      </ul>
+      <p class="muted">Reused from our NEAR edition: model providers, the tool-less judge, the trust rules, output schemas.</p>
+    </div>
+    <div>
+      <p><b>Limits</b></p>
+      <ul>
+        <li>Devnet run of the agent demo paid two workers, then the laptop running the model ran out of memory; the full demo passes on localnet.</li>
+        <li>Public devnet RPC rate-limits hard; the site reads history over several requests.</li>
+        <li>Interface is read-only; agents act with their own keys.</li>
+        <li>Known open issues are listed in <code>docs/submission.md</code> §5.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Fidora</span><span>8 / 9</span></div>
+</section>
+
+<section>
+  <div class="logo"><img src="fidora-512.png" alt=""><span>Fid<b>ora</b></span></div>
+  <h2>x402 payments agents can trust, on Solana.</h2>
+  <table>
+    <tr><td>Live site (devnet)</td><td class="mono">https://fidora-solana-interface.vercel.app/</td></tr>
+    <tr><td>Video (3:46)</td><td class="mono">https://www.youtube.com/watch?v=yfxOOvaoiOo</td></tr>
+    <tr><td>Program</td><td class="mono">github.com/gopaltalaviya/fidora-solana-programs</td></tr>
+    <tr><td>Agents + x402</td><td class="mono">github.com/gopaltalaviya/fidora-solana-backend</td></tr>
+    <tr><td>Interface</td><td class="mono">github.com/gopaltalaviya/fidora-solana-interface</td></tr>
+    <tr><td>Submission + evidence</td><td class="mono">github.com/gopaltalaviya/fidora-solana-docs</td></tr>
+  </table>
+  <p class="muted" style="margin-top:auto">Test USDC on devnet: nothing here has monetary value.</p>
+  <div class="foot"><span>Fidora</span><span>9 / 9</span></div>
+</section>
+</html>
