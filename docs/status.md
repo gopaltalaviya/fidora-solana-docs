@@ -1,4 +1,4 @@
-# Fidora: status, 2026-11-07
+# Fidora: status, 2026-11-08
 
 Every "done" line was checked live on a local `solana-test-validator`
 (Agave 3.0.10), not against a mock.
@@ -15,7 +15,7 @@ Every "done" line was checked live on a local `solana-test-validator`
 | Agents: plan, discover on chain, trust gate, select, x402 pay, judge, approve or dispute | **done** | `npm run demo:local`: `Demo passed.` from a fresh chain with cached models |
 | Failed-payment handling | **done** | The demo: worker model down → `decline_job` → purse restored |
 | Attack: farm detection, injected orchestrator, stolen key | **done** | The demo: `COUNTERPARTY_BLOCKED`, spend ceiling, `PerTaskCapExceeded`, `NotAgentOwner`, purses unchanged, I1 |
-| Devnet deployment, and `exact` on devnet | **waiting on the owner** | Needs (1) the owner's own wallet, named by `FIDORA_DEPLOYER_KEYPAIR` in `fidora-solana-programs/.env` (an empty `.env` is in place, gitignored), and (2) the program keypair whose public key is `VkxrZbgyAXRn5mAAy5SscctDRmMp2AVsmvmsiPD5Uku` — it is not in the repo by design (`*-keypair.json` is gitignored). If it is lost, the owner makes a new one and the program id, `fidora.so` and the IDL are rebuilt. 2026-11-07: that address holds no account on devnet. Test keys are saved before they are funded and swept back to the deployer (`scripts/sweep-check.ts`, live) |
+| Devnet deployment | **done** (2026-11-08) | Program `5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg` (a new program keypair: the one for the old id `VkxrZbg…` was not found, so `declare_id!`, `fidora.so` and the IDL were rebuilt for the new id), deployed and initialized by the owner's wallet `2m9UHYVSk6V7ErSycjhQdev2RqjGymYsgx2aozhC19eG` (upgrade authority, owner and arbiter). `verify-solana --cluster devnet`: 21 checks passed on devnet; see below |
 | Aurora Intents | **not started** | Needs an Aurora Client Portal API key and mainnet funds (Aurora has no testnet) |
 | Web interface | **done** (read-only) | [fidora-solana-interface](https://github.com/gopaltalaviya/fidora-solana-interface): marketplace, agent profiles with the trust verdict, escrow job timelines, activity feed, status with invariant I1 — all read from the chain by its own `/api/v1` routes. 110 unit + 61 browser tests (×5 browsers with `E2E_ALL_BROWSERS=1`). `DEMO_HOLD=1 npm run demo:local`, then `FIDORA_CLUSTER=localnet pnpm dev` |
 | GitHub repos | **done** | [fidora-solana-programs](https://github.com/gopaltalaviya/fidora-solana-programs), [fidora-solana-backend](https://github.com/gopaltalaviya/fidora-solana-backend), [fidora-solana-docs](https://github.com/gopaltalaviya/fidora-solana-docs) |
@@ -33,6 +33,24 @@ Found and fixed along the way:
   agent linked to `/jobs`; only `/jobs/<id>` exists. `/jobs` now redirects to
   the activity feed, which lists the jobs (`next.config.mjs`); a browser test
   covers it, red before the fix.
+
+## Devnet, 2026-11-08
+
+| | |
+|---|---|
+| Program | [`5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg`](https://explorer.solana.com/address/5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg?cluster=devnet), upgrade authority `2m9UHYV…` (the owner's wallet) |
+| Config / vault / test USDC | `4XzNRdtZ…` / `2jc5eNfZ…` / `34rRkNq7…` (`fidora-solana-programs/deployments/devnet.json`) |
+| Rebuild for the new id | 7/7 unit tests; the IDL rebuilt from source is byte-identical to the committed one with the id swapped; `fidora.so` sha256 `62ade182…` |
+| `verify-solana --cluster devnet` | 21 checks passed on devnet, each with its explorer link (`auto_approve` and `expire_dispute` wait out 10 min / 1 h windows: localnet only, 23/23) |
+| Agent demo on devnet (`DEMO_CLUSTER=devnet`, local Ollama) | Workers registered and staked, the orchestrator funded, the plan made, workers discovered on chain, and two x402 jobs (18, 19) locked in escrow and delivered on chain. The run was then stopped by the host for low memory (a 16 GB laptop running the model), not by a failure. The full demo passes on localnet. With `AGENT_MODE=cached` it cannot run on devnet: the recordings are keyed on a fresh chain's agent ids, and devnet's keep growing |
+| Local gate on the new build | backend 52/52, `test:live` all passed, `demo:local` passed, interface 115/115, browsers 303 passed (5 browsers) |
+
+Found on devnet and fixed: the public RPC answers bursts with 429, and
+refuses any `getTransaction` batch of 10 or more outright (measured: 5
+pass; 10 → 7 of 10 refused; 20 and 50 → all refused), sometimes inside an
+HTTP 200. The scripts, the backend and the interface now wait those out and
+retry a dropped connection (`patientFetch`, 8 tests, red without the
+retry), and read the event history 5 transactions per batch on devnet.
 
 ## Re-verified 2026-11-07 on a fresh checkout (Windows 11 + WSL Ubuntu, Agave 4.0.0)
 

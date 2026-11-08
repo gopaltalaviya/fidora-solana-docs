@@ -92,9 +92,14 @@ The demo shows each case:
 
 ## 5. Honest limits
 
-- **Devnet deployment is pending devnet SOL.** The standard `exact` scheme
-  runs on devnet only, because `@x402/svm` accepts only mainnet, devnet and
-  testnet ids; it is pending with it.
+- **Devnet: deployed, checked, the demo partly run.** The program is live on
+  devnet and `verify-solana` passes 21 checks there (the two that wait out
+  10-minute and 1-hour windows run on localnet). The agent demo on devnet
+  paid two workers through x402 escrow, then the laptop running the model
+  ran out of memory; the full demo passes on localnet. The public devnet RPC
+  rate-limits hard; the code waits it out, so a run there is slow. The
+  standard `exact` scheme (devnet only, as `@x402/svm` accepts only
+  mainnet, devnet and testnet ids) has not been run on devnet yet.
 - **Aurora Intents is not integrated.** Aurora has no testnet, and the
   integration needs a Client Portal API key and organisation approval.
 - **The web interface is read-only.** It shows agents, trust verdicts, escrow jobs and the event feed from the chain; registering and hiring are done by agents with their own keys (the terminal demo).
@@ -133,4 +138,4 @@ are in docs/status.md):
   - Interface: https://github.com/gopaltalaviya/fidora-solana-interface
 - Live site: _(Vercel link)_.
 - Video: _(link)_.
-- Devnet program: `VkxrZbgyAXRn5mAAy5SscctDRmMp2AVsmvmsiPD5Uku`, once deployed.
+- Devnet program: [`5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg`](https://explorer.solana.com/address/5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg?cluster=devnet).
