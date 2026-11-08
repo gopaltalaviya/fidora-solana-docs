@@ -40,12 +40,12 @@ Done and tested: the program on devnet (its bytes = a rebuild of this
 source, sha256 `62ade182…`), the live site
 https://fidora-solana-interface.vercel.app/ (21/21 pages in a browser, on
 devnet), the four repos pushed and passing from fresh clones, the
-screenshots, and the video (`fidora-demo.webm`, 3:43, kept outside git).
+screenshots, and the video (`fidora-demo.webm`, 3:46, kept outside git; https://www.youtube.com/watch?v=yfxOOvaoiOo).
 Nothing is uncommitted.
 
 Waits on the owner, before the deadline (Mon 9 Nov 2026, 11:59 UTC):
 1. Make the four repos public (they answer 404 until then).
-2. ~~Upload the video~~: done, https://www.youtube.com/watch?v=6y6iftaklzU (in `submission.md` §6).
+2. ~~Upload the video~~: done, https://www.youtube.com/watch?v=yfxOOvaoiOo (in `submission.md` §6).
 3. Submit on Encode from `submission.md`.
 4. Optional: a private devnet RPC key on Vercel (`FIDORA_RPC_URL`), so the
    activity and trust pages are complete on the first load.
