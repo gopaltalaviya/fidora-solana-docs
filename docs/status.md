@@ -34,6 +34,27 @@ Found and fixed along the way:
   the activity feed, which lists the jobs (`next.config.mjs`); a browser test
   covers it, red before the fix.
 
+## Next up, and what waits on the owner (2026-11-08)
+
+Done and tested: the program on devnet (its bytes = a rebuild of this
+source, sha256 `62ade182…`), the live site
+https://fidora-solana-interface.vercel.app/ (21/21 pages in a browser, on
+devnet), the four repos pushed and passing from fresh clones, the
+screenshots, and the video (`fidora-demo.webm`, 3:43, kept outside git).
+Nothing is uncommitted.
+
+Waits on the owner, before the deadline (Mon 9 Nov 2026, 11:59 UTC):
+1. Make the four repos public (they answer 404 until then).
+2. ~~Upload the video~~: done, https://www.youtube.com/watch?v=6y6iftaklzU (in `submission.md` §6).
+3. Submit on Encode from `submission.md`.
+4. Optional: a private devnet RPC key on Vercel (`FIDORA_RPC_URL`), so the
+   activity and trust pages are complete on the first load.
+
+To resume: `npm run test:live` and `npm run demo:local` in
+fidora-solana-backend; `corepack pnpm check` and `pnpm test:e2e` in
+fidora-solana-interface; `node --env-file=.env scripts/verify-solana.mjs
+--cluster devnet` in fidora-solana-programs (the owner's wallet in `.env`).
+
 ## Devnet, 2026-11-08
 
 | | |

@@ -143,5 +143,5 @@ are in docs/status.md):
   [activity](images/05-activity.png), [status: vault = owed](images/06-status.png).
 - Live site, reading devnet: https://fidora-solana-interface.vercel.app/
   (status shows the vault = what the program owes, live).
-- Video: _(link)_.
+- Video (3:43, captioned): https://www.youtube.com/watch?v=6y6iftaklzU
 - Devnet program: [`5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg`](https://explorer.solana.com/address/5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg?cluster=devnet).
