@@ -141,6 +141,7 @@ are in docs/status.md):
   [the farm agent: self-funded → block](images/03-agent-farm.png),
   [an escrow job's timeline](images/04-job-timeline.png),
   [activity](images/05-activity.png), [status: vault = owed](images/06-status.png).
-- Live site: _(Vercel link)_.
+- Live site, reading devnet: https://fidora-solana-interface.vercel.app/
+  (status shows the vault = what the program owes, live).
 - Video: _(link)_.
 - Devnet program: [`5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg`](https://explorer.solana.com/address/5pND3A7Xqibq5h9XxY7YtuoJ5TomYKn79usirDBysNRg?cluster=devnet).
