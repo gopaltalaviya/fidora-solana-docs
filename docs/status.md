@@ -59,6 +59,21 @@ HTTP 200. The scripts, the backend and the interface now wait those out and
 retry a dropped connection (`patientFetch`, 8 tests, red without the
 retry), and read the event history 5 transactions per batch on devnet.
 
+The site on devnet, browser-tested (production build, `FIDORA_CLUSTER=devnet`,
+the public RPC), 2026-11-08: the event scan of 184 program transactions did
+not answer in 10 minutes. Measured: the public RPC lets ~10 `getTransaction`
+calls through, then refuses every call, single or batched, for a while. A
+serverless request would time out, taking `/activity`, trust verdicts and job
+timelines with it. Fixed: on devnet the scan reads one transaction at a time
+within `FIDORA_SCAN_BUDGET_MS` (20 s), keeps what it read for the next
+request, and answers incomplete in the meantime (trust readings then block:
+no agent is cleared on partial evidence); the RPC retry is bounded to 8 s per
+call. After: every call answered in 7–24 s and the history filled in over
+calls (10 → 27 → 39 → 50 events); all 21 pages of the sitemap load against
+devnet with no console error. On localnet: 50 events, complete, the farm agent
+self-funded → block, 21/21 pages. A private devnet RPC (`FIDORA_RPC_URL`, a
+free Helius / Alchemy / QuickNode key) reads the history at once.
+
 ## Re-verified 2026-11-07 on a fresh checkout (Windows 11 + WSL Ubuntu, Agave 4.0.0)
 
 | Check | Result |
