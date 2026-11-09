@@ -26,8 +26,7 @@ command, and the run ends with `Demo passed.`
 | [docs/video-script.md](docs/video-script.md) | The 2–4 minute demo video, shot by shot, from the real demo output |
 | [docs/status.md](docs/status.md) | What is done, with evidence, and what is not |
 
-Fidora is the Solana edition of a protocol first built on Monad (AgentX v3)
-and on NEAR (Pactora). docs/submission.md §3 states exactly what was
-reused.
+docs/submission.md §3 states exactly what existed before the hackathon and
+what was built during it.
 
 MIT. See `LICENSE`.

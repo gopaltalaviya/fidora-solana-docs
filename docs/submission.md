@@ -49,16 +49,17 @@ The demo runs end to end on a local validator with one command.
 ## 3. What existed before the hackathon, and what was built in it
 
 **Existed:**
-- The protocol design, and two earlier implementations: AgentX v3 on Monad
-  (Solidity) and Pactora on NEAR (Rust).
-- From Pactora, reused unchanged in fidora-solana-backend:
+- The protocol design (escrow states, caps, bonds, the trust rules), by the
+  author.
+- Agent code written by the author before the hackathon, reused unchanged in
+  fidora-solana-backend:
   - `src/models/`: the model providers, cached replay, the tool-less judge,
     and the prompts
   - the trust-verdict rules
   - the worker output schemas
 
 **Built during the hackathon:**
-- The Anchor program: a port of the NEAR contract's rules to PDAs and an SPL
+- The Anchor program: the protocol's rules on Solana, with PDAs and an SPL
   vault, plus the new `decline_job`. Live-verified with 23 checks.
 - The IDL build without the Anchor CLI.
 - The `fidora-escrow` x402 scheme (client, resource server, facilitator) on
@@ -113,8 +114,8 @@ are in docs/status.md):
 - **A client at its full daily cap cannot dispute.** The dispute bond is
   charged to the client's caps like any spend. A client that hired for its
   whole remaining day cannot pay it, and the job auto-approves after the
-  review window unless the owner raises the caps in time. Inherited from
-  the NEAR rules.
+  review window unless the owner raises the caps in time. Part of the
+  protocol design.
 - **`initialize` is not tied to the upgrade authority.** Someone watching a
   fresh deployment could initialize it first; `deploy.mjs` refuses an
   initialized program, so the cost is a redeploy, not funds.

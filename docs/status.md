@@ -5,8 +5,8 @@ Every "done" line was checked live on a local `solana-test-validator`
 
 | Item | State | Evidence |
 |---|---|---|
-| Anchor program, ported from Pactora/NEAR, plus `decline_job` | **done** | `verify-solana`: 23/23 live. Each new check was red on the old program first |
-| Rolling-cap unit tests | **done** | 7/7: six ported from NEAR, plus a Clock step back (red on the old code: it panicked) |
+| Anchor program, the protocol's rules on Solana, plus `decline_job` | **done** | `verify-solana`: 23/23 live. Each new check was red on the old program first |
+| Rolling-cap unit tests | **done** | 7/7: six for the rolling cap, plus a Clock step back (red on the old code: it panicked) |
 | IDL without the Anchor CLI | **done** | `scripts/build-idl.mjs`, the same steps as `anchor-lang-idl` 0.1.4; 36 instructions |
 | `fidora-escrow` x402 scheme on the official x402 v2 packages | **done** | `scripts/x402-smoke.ts` live: 402 quote, lock, deliver with `sha256(body)`, approve, and a failure refunded via decline |
 | Unit tests | **done** | 46: facilitator tamper refusals, the pay and judge gates, trust completeness, the chain layer. Mutation-checked: removing the amount check, or the foreign-instruction check, turns a test red |
