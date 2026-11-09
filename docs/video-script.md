@@ -2,8 +2,8 @@
 
 One take of `DEMO_HOLD=1 npm run demo:local` in a terminal, a code close-up,
 then the web interface reading what the demo left on chain
-(`FIDORA_CLUSTER=localnet pnpm dev` in fidora-solana-interface, or the devnet
-site once deployed). The lines on screen are the real demo output; nothing is
+(`FIDORA_CLUSTER=localnet pnpm dev` in fidora-solana-interface, or the live devnet
+site). The lines on screen are the real demo output; nothing is
 staged.
 
 | Time | On screen | Voice-over |
