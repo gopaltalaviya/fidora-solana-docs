@@ -71,6 +71,12 @@ Found and fixed:
   ignored the retry's random jitter. The test now pins `Math.random`
   (interface e0334ee); 12/12 runs green.
 - Cosmetic, left as is: the footer says "Solana devnet" on a localnet run too.
+- Checked against the Encode rules (track text saved with the final check):
+  every submission requirement and judging criterion is covered; the only
+  gap was the backend README's `npm ci`, which npm 10 (Node 22) refuses, so
+  the README now gives the `npm install` fallback (backend cb5501d).
+- All four repos public since 2026-11-09 ~00:30 UTC; deck, video, live site
+  and every link verified from an anonymous clone.
 
 To resume: `npm run test:live` and `npm run demo:local` in
 fidora-solana-backend; `corepack pnpm check` and `pnpm test:e2e` in
